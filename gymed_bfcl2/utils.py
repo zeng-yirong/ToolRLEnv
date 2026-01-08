@@ -1,9 +1,3 @@
-"""
-BFCL Gymnasium环境的工具类
-
-提供函数调用执行、状态管理等核心功能。
-"""
-
 import copy
 import json
 import re
