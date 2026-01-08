@@ -147,11 +147,11 @@ DEFAULT_STATE = scenario = {
 
 
 
-class GorillaFileSystem:
+class FileSystem:
 
     def __init__(self) -> None:
         """
-        Initialize the Gorilla file system with a root directory
+        Initialize the file system with a root directory
         """
         self.root: Directory
         self._current_dir: Directory
