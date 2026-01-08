@@ -5,27 +5,11 @@ from eval_checker.multi_turn_eval.func_source_code.trading_bot import TradingBot
 class TradingBotEnv:
     def __init__(self,test_entry: Dict[str, Any]):
         self.trading_bot_api = TradingBot()
-        self.reward_config = {
-            "trade_executed": 3.0,          # 成功执行交易
-            "profit_made": 5.0,             # 获得利润
-            "order_placed": 2.0,            # 成功下单
-            "market_analyzed": 1.5,         # 完成市场分析
-            "portfolio_updated": 1.0,       # 投资组合更新
-            "task_completion": 5.0,         # 任务完成
-            "trade_failed": -3.0,           # 交易失败
-            "insufficient_funds": -2.5,     # 资金不足
-            "market_closed": -2.0,          # 市场关闭
-        }
-        self.current_user = None
-        self.trading_history = []
-        self.portfolio_value = 10000.0  # 初始资金
         self.test_entry = test_entry
         self._load_scenario_from_test_entry()
 
     def _load_scenario_from_test_entry(self):
-        # 从 test_entry 中获取 initial_config 并加载
         if "initial_config" in self.test_entry and "TradingBot" in self.test_entry["initial_config"]:
-            # 直接传递配置到 TravelAPI
             self.trading_bot_api._load_scenario(self.test_entry["initial_config"]["TradingBot"])
         else:
             default_scenario = DEFAULT_STATE
@@ -139,7 +123,5 @@ class TradingBotEnv:
             "success": success,
             "parameters": parameters
         }
-
-        self.trading_history.append(operation)
 
         return str(result), success
