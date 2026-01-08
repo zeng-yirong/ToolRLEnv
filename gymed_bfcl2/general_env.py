@@ -10,7 +10,7 @@ from TradingBot import TradingBotEnv
 from Ticket import TicketEnv
 from Message import MessageEnv
 from Math import MathEnv
-from Gorilla import GorillaEnv
+from File import FileEnv
 import numpy as np
 
 
@@ -35,18 +35,6 @@ class GeneralEnv(gym.Env):
         self.max_turns = max_turns
         self.current_turn = 0
         self.task_type = task_type
-        # 默认奖励配置
-        self.reward_config = {
-            "correct_function_call": 1.0,
-            "correct_state": 2.0,
-            "incorrect_function_call": -0.5,
-            "state_mismatch": -1.0,
-            "turn_penalty": -0.1,
-            "task_completion": 5.0,
-            "task_failure": -2.0
-        }
-        if reward_config:
-            self.reward_config.update(reward_config)
 
         # 初始化执行器和状态管理器
         self.executor = FunctionCallExecutor(test_entry)
@@ -68,7 +56,7 @@ class GeneralEnv(gym.Env):
         self.ticket_env = TicketEnv(test_entry = self.test_entry)
         self.message_env = MessageEnv(test_entry = self.test_entry)
         self.math_env = MathEnv(test_entry = self.test_entry)
-        self.gorilla_env = GorillaEnv(test_entry = self.test_entry)
+        self.file_env = FileEnv(test_entry = self.test_entry)
     def _setup_initial_state(self):
         """设置初始状态"""
         self.current_question = self.test_entry["question"][0][0]["content"]
@@ -292,8 +280,8 @@ class GeneralEnv(gym.Env):
             execution_result, execution_success = self.message_env.execute_function_call(function_name=function_name,parameters=function_param)
         elif function_env == 'math':
             execution_result, execution_success = self.math_env.execute_function_call(function_name=function_name,parameters=function_param)
-        elif function_env == 'gorilla':
-            execution_result, execution_success = self.gorilla_env.execute_function_call(function_name=function_name,parameters=function_param)
+        elif function_env == 'file':
+            execution_result, execution_success = self.file_env.execute_function_call(function_name=function_name,parameters=function_param)
         else:
             execution_result = f"No env named {function_name}"
             execution_success = False
@@ -320,4 +308,5 @@ class GeneralEnv(gym.Env):
                 para += f",{item['properties_key']}={item['properties_value']['value']}"
             return f"{func_doc['name']}({para[1:]})"
         else:
+
             raise ValueError(f"Unsupported action type: {type(action)}")
