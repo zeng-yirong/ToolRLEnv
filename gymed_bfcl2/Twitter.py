@@ -5,30 +5,11 @@ from eval_checker.multi_turn_eval.func_source_code.posting_api import TwitterAPI
 class TwitterEnv:
     def __init__(self,test_entry: Dict[str, Any]):
         self.twitter_api = TwitterAPI()
-        self.reward_config = {
-            "tweet_posted": 3.0,            # 成功发布推文
-            "comment_added": 2.0,           # 成功添加评论
-            "retweeted": 2.5,               # 成功转发
-            "user_followed": 1.5,           # 成功关注用户
-            "tweet_liked": 1.0,             # 成功点赞推文
-            "search_completed": 1.5,        # 完成搜索
-            "task_completion": 5.0,         # 任务完成
-            "post_failed": -2.0,            # 发布失败
-            "not_authenticated": -2.5,     # 未认证
-            "user_not_found": -1.5,         # 用户未找到
-            "tweet_not_found": -1.0,        # 推文未找到
-        }
-        self.current_user = None
-        self.tweet_history = []
-        self.social_interactions = []
         self.test_entry = test_entry
         self._load_scenario_from_test_entry()
 
     def _load_scenario_from_test_entry(self):
-        """从传入的 test_entry 加载场景到 TravelAPI"""
-        # 从 test_entry 中获取 initial_config 并加载
         if "initial_config" in self.test_entry and "TwitterAPI" in self.test_entry["initial_config"]:
-            # 直接传递配置到 TravelAPI
             self.twitter_api._load_scenario(self.test_entry["initial_config"]["TwitterAPI"])
         else:
             default_scenario = DEFAULT_STATE
@@ -106,7 +87,5 @@ class TwitterEnv:
             "success": success,
             "parameters": parameters
         }
-
-        self.tweet_history.append(operation)
 
         return str(result), success
