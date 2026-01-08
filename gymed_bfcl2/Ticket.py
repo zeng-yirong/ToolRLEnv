@@ -5,26 +5,10 @@ from eval_checker.multi_turn_eval.func_source_code.ticket_api import TicketAPI, 
 class TicketEnv:
     def __init__(self,test_entry: Dict[str, Any]):
         self.ticket_api = TicketAPI()
-        self.reward_config = {
-            "ticket_created": 2.5,          # 成功创建工单
-            "ticket_updated": 1.5,          # 成功更新工单
-            "ticket_closed": 3.0,           # 成功关闭工单
-            "ticket_found": 1.0,            # 找到工单
-            "comment_added": 1.0,           # 成功添加评论
-            "priority_changed": 1.5,        # 成功修改优先级
-            "task_completion": 5.0,         # 任务完成
-            "create_failed": -2.0,          # 创建失败
-            "ticket_not_found": -1.5,       # 工单未找到
-            "unauthorized": -2.0,           # 未授权操作
-        }
-        self.current_user = None
-        self.ticket_actions = []
         self.test_entry = test_entry
         self._load_scenario_from_test_entry()
 
     def _load_scenario_from_test_entry(self):
-        """从传入的 test_entry 加载场景到 TravelAPI"""
-        # 从 test_entry 中获取 initial_config 并加载
         if "initial_config" in self.test_entry and "TicketAPI" in self.test_entry["initial_config"]:
             self.ticket_api._load_scenario(self.test_entry["initial_config"]["TicketAPI"])
         else:
@@ -83,7 +67,5 @@ class TicketEnv:
             "success": success,
             "parameters": parameters
         }
-
-        self.ticket_actions.append(operation)
 
         return str(result), success
