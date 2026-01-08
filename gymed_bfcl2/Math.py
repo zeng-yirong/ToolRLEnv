@@ -5,18 +5,6 @@ from eval_checker.multi_turn_eval.func_source_code.math_api import MathAPI
 class MathEnv:
     def __init__(self,test_entry: Dict[str, Any]):
         self.math_api = MathAPI()
-        self.reward_config = {
-            "correct_calculation": 2.0,     # 正确计算
-            "complex_solved": 3.0,          # 解决复杂问题
-            "sequence_completed": 1.5,      # 完成计算序列
-            "precision_achieved": 2.0,      # 达到精度要求
-            "task_completion": 5.0,         # 任务完成
-            "calculation_error": -2.0,      # 计算错误
-            "invalid_input": -1.5,          # 无效输入
-            "precision_lost": -1.0,         # 精度丢失
-        }
-        self.calculation_history = []
-        self.current_precision = 5  # 默认精度
         self.test_entry = test_entry
 
     def execute_function_call(self, function_name, parameters) -> Tuple[str, bool]:
@@ -103,7 +91,5 @@ class MathEnv:
             "success": success,
             "parameters": parameters
         }
-
-        self.calculation_history.append(operation)
 
         return str(result), success
