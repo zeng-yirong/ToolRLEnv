@@ -5,28 +5,12 @@ from eval_checker.multi_turn_eval.func_source_code.vehicle_control import Vehicl
 class VehicleControlEnv:
     def __init__(self,test_entry: Dict[str, Any]):
         self.vehicle_api = VehicleControlAPI()
-        self.reward_config = {
-            "engine_started": 2.0,  # 发动机启动成功
-            "vehicle_moved": 1.5,  # 车辆移动成功
-            "destination_reached": 5.0,  # 到达目的地
-            "safety_activated": 3.0,  # 安全系统激活
-            "navigation_set": 2.0,  # 导航设置成功
-            "task_completion": 5.0,  # 任务完成
-            "engine_failed": -2.0,  # 发动机启动失败
-            "safety_violation": -3.0,  # 安全违规
-            "out_of_fuel": -2.5,  # 燃料不足
-        }
-        self.vehicle_actions = []
-        self.current_location = "Home"
-        self.destination = None
         self.test_entry = test_entry
         self._load_scenario_from_test_entry()
 
     def _load_scenario_from_test_entry(self):
-        """从传入的 test_entry 加载场景到 TravelAPI"""
         # 从 test_entry 中获取 initial_config 并加载
         if "initial_config" in self.test_entry and "VehicleControlAPI" in self.test_entry["initial_config"]:
-            # 直接传递配置到 TravelAPI
             self.vehicle_api._load_scenario(self.test_entry["initial_config"]["VehicleControlAPI"])
         else:
             default_scenario = DEFAULT_STATE
@@ -125,6 +109,5 @@ class VehicleControlEnv:
             "parameters": parameters
         }
 
-        self.vehicle_actions.append(operation)
 
         return str(result), success
