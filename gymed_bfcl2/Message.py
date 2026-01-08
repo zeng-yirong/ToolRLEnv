@@ -5,26 +5,11 @@ from eval_checker.multi_turn_eval.func_source_code.message_api import MessageAPI
 class MessageEnv:
     def __init__(self,test_entry: Dict[str, Any]):
         self.message_api = MessageAPI()
-        self.reward_config = {
-            "message_sent": 2.0,            # 成功发送消息
-            "message_received": 1.5,        # 成功接收消息
-            "user_authenticated": 1.0,      # 用户认证成功
-            "user_found": 1.0,              # 找到用户
-            "message_searched": 1.5,        # 成功搜索消息
-            "task_completion": 5.0,         # 任务完成
-            "send_failed": -2.0,            # 发送失败
-            "user_not_found": -1.5,         # 用户未找到
-            "unauthorized": -2.0,           # 未授权操作
-        }
-        self.current_user = None
-        self.message_history = []
         self.test_entry = test_entry
         self._load_scenario_from_test_entry()
 
     def _load_scenario_from_test_entry(self):
-        # 从 test_entry 中获取 initial_config 并加载
         if "initial_config" in self.test_entry and "MessageAPI" in self.test_entry["initial_config"]:
-            # 直接传递配置到 TravelAPI
             self.message_api._load_scenario(self.test_entry["initial_config"]["MessageAPI"])
         else:
             default_scenario = DEFAULT_STATE
@@ -32,11 +17,7 @@ class MessageEnv:
 
     def execute_function_call(self, function_name, parameters) -> Tuple[str, bool]:
         try:
-            if function_name == "_generate_id":
-                result = self.message_api._generate_id()
-                success = True
-
-            elif function_name == "list_users":
+            if function_name == "list_users":
                 result = self.message_api.list_users()
                 success = True
 
@@ -90,7 +71,5 @@ class MessageEnv:
             "success": success,
             "parameters": parameters
         }
-
-        self.message_history.append(operation)
 
         return str(result), success
