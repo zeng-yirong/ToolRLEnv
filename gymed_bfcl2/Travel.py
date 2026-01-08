@@ -5,17 +5,13 @@ from eval_checker.multi_turn_eval.func_source_code.travel_booking import TravelA
 
 class TravelBookingEnv:
     def __init__(self,test_entry: Dict[str, Any]):
-        self.booking_history = []
         self.test_entry = test_entry
         self.travel_api = TravelAPI()
-        self.reward_config = {}
         self._load_scenario_from_test_entry()
 
     def _load_scenario_from_test_entry(self):
-        """从传入的 test_entry 加载场景到 TravelAPI"""
         # 从 test_entry 中获取 initial_config 并加载
         if "initial_config" in self.test_entry and "TravelAPI" in self.test_entry["initial_config"]:
-            # 直接传递配置到 TravelAPI
             self.travel_api._load_scenario(self.test_entry["initial_config"]["TravelAPI"])
         else:
             default_scenario = {
@@ -103,7 +99,5 @@ class TravelBookingEnv:
             "success": success,
             "parameters": parameters
         }
-
-        self.booking_history.append(operation)
 
         return str(result), success
